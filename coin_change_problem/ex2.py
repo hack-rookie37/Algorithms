@@ -63,5 +63,3 @@ while True:
             continue
     print("필요한 총 동전 개수는 %s개 입니다." % min)
     print("Running time is %s sec(s)" % (time.time() - start_time))
-    #print(dp)
-    #print(gcl[-1])
