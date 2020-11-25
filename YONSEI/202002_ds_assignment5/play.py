@@ -30,4 +30,4 @@ Total Nodes :  10
 '''
 
 print('Traversal Serach: %d' % (findTraversal(my_tree)))
-#print('Greedy Serach: %d' % (findGreedy(my_tree)))
+print('Greedy Serach: %d' % (findGreedy(my_tree)))
