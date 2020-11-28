@@ -15,6 +15,7 @@ my_tree[16] = 1
 my_tree[7] = 2
 my_tree[8] = 1
 
+
 # problem 1
 # print_tree(my_tree)
 '''
@@ -29,16 +30,18 @@ Total Nodes :  10
                 3-(L) [ 9]:3
                      4-(L) [ 7]:2
                           5-(R) [ 8]:1
-'''
+
 
 print('Traversal Serach: %d' % (findTraversal(my_tree)))
 print('Greedy Serach: %d' % (findGreedy(my_tree)))
-
+'''
 
 # probem 2
-'''
+
 tree = TwoThreeTree()
 
+
+'''
 lst = [13, 7, 24, 15, 4, 29, 20, 16]
 for item in lst:
      tree.insert(item)
