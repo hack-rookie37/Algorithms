@@ -87,11 +87,19 @@ class TwoThreeTree:
     def split(self, current_node):
         print("Split: " + str(current_node.data))
         
-        current_node.parent = TreeNode(current_node.data.pop(1))
-        left_node = TreeNode(current_node.data[0], current_node)
-        right_node = TreeNode(current_node.data[1], current_node)
-        current_node.parent.child.append(left_node)
-        current_node.parent.child.append(right_node)
+        
+        split_node = TreeNode(current_node.data.pop(1), current_node.parent)
+        left_node = TreeNode(current_node.data[0], split_node)
+        right_node = TreeNode(current_node.data[1], split_node)
+        split_node.child.append(left_node)
+        split_node.child.append(right_node)        
+        if current_node.parent == None:
+            current_node.parent = split_node
+        else:
+            current_node.parent.data.append(split_node.data[0])
+            current_node.parent.child.append(left_node)
+            current_node.parent.child.append(right_node)
+        
         if current_node.parent != None:
             self.check(current_node.parent)
         
