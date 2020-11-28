@@ -2,18 +2,16 @@
 Student ID:
 NAME: 
 '''
-
-
-### Do Not Distrub TreeNode Class
+# Do Not Distrub TreeNode Class
 class TreeNode:
-    def __init__(self, data, parent = None):
+    def __init__(self, data, parent=None):
         self.data = [data]
         self.parent = parent
         self.child = []
-    
+
     def __len__(self):
         return len(self.data)
-    
+
     def __lt__(self, node):
         return self.data[0] < node.data[0]
 
@@ -21,44 +19,87 @@ class TreeNode:
         return len(self.child) == 0
 
 
-    
 class TwoThreeTree:
     def __init__(self):
         self.root = None
         self.size = 0
-    
+
     def __len__(self):
         return self.size
-    
+
+###################################################
     def printTree(self):
         print('\n'+'-'*20+'Print Tree'+'-'*20)
         tmp_list = [self.root]
         while 1:
-            child_list = tmp_list.copy() 
+            child_list = tmp_list.copy()
             tmp_list = []
             for child in child_list:
-                print(child.data, end = ' ')
+                print(child.data, end=' ')
                 tmp_list.extend(child.child)
             print()
             if len(tmp_list) == 0:
                 break
         print('-'*50)
-    
-    def insert(self, item):
-        print("Insert: " + str(item))
-        ## CODE HERE ##
-        pass
+###################################################
 
-    
-    def add(self, current_node, new_node):
-        ## CODE HERE ##
-        pass
+    def insert(self, item):  # find location to add Node
+        print("Insert: " + str(item))
+        new_node = TreeNode(item)
+        if self.root:
+            cur_node = self.root
+            
+            while True:
+                if cur_node._isLeaf():
+                    if len(cur_node) == 1:
+                        self.add(cur_node, new_node)
+                        break
+                    else:
+                        if cur_node.parent == None:
+                            self.add(cur_node, new_node)
+                            self.root = cur_node.parent
+                            self.size = self.size + 1
+                            break
+                        elif len(cur_node.parent.data) == 1:
+                            self.add(cur_node, new_node)
+                            self.size = self.size + 1
+                            break
+                        else: # len(cur_node.parent.data) == 2
+                            pass
+                else:
+                    if new_node < cur_node:
+                        cur_node = cur_node.child[0]
+                        continue
+                    else:
+                        cur_node = cur_node.child[1]
+                        continue
+        else:
+            self.root = new_node
+            self.size = 1
         
+
+    def add(self, current_node, new_node):
+        current_node.data.append(new_node.data[0])
+        current_node.data.sort()
+        
+        self.check(current_node)
+
     def split(self, current_node):
         print("Split: " + str(current_node.data))
-        ## CODE HERE ##
-        pass
         
+        current_node.parent = TreeNode(current_node.data.pop(1))
+        left_node = TreeNode(current_node.data[0], current_node)
+        right_node = TreeNode(current_node.data[1], current_node)
+        current_node.parent.child.append(left_node)
+        current_node.parent.child.append(right_node)
+        if current_node.parent != None:
+            self.check(current_node.parent)
+        
+
+    def check(self, current_node):
+        if len(current_node) > 2:
+            self.split(current_node)
+    
     def find(self, item):
         ## CODE HERE ##
         pass
