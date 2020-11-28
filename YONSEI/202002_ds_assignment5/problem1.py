@@ -16,6 +16,8 @@ def findTraversal(tree):  # DFS, Pre-order(NLR)
     if isinstance(tree, TreeNode):
         print(tree.key)
     '''
+    if tree == None: # Basecase. (Just in case)
+        return 0
     
     #tree is instance of TreeNode
     payload = tree.payload
@@ -36,6 +38,9 @@ def findGreedy(tree):
         tree = tree.root # tree를 tree의 root node로 assign.
         # from:  type(tree) == BinarySearchTree.BinarySearchTree
         # to:  type(tree) == BinarySerachTree.TreeNode
+    
+    if tree == None: # Basecase. (Just in case)
+        return 0
     
     payload = tree.payload # payload -> TreeNode.payload
     if not tree.has_any_children(): # Both childs are null
