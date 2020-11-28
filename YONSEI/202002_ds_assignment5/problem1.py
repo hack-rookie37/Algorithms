@@ -16,18 +16,19 @@ def findTraversal(tree):  # DFS, Pre-order(NLR)
     if isinstance(tree, TreeNode):
         print(tree.key)
     '''
-
-    if tree == None:  # Base case) null node
-        return 0
-    payload = tree.payload  # payload -> TreeNode.payload
-    left, right = 0, 0  # left, right
-    left += findTraversal(tree.left_child)  # sum of leftchilds' payloads
-    right += findTraversal(tree.right_child)  # sum of rightchilds' payloads
-    if left > right:  # compare
-        payload += left  # assign
+    
+    #tree is instance of TreeNode
+    payload = tree.payload
+    left, right = 0, 0  # sum of payloads of left children, right children
+    if tree.has_left_child():
+        left += findTraversal(tree.left_child)  # addition
+    if tree.has_right_child():
+        right += findTraversal(tree.right_child)  # addition
+    if left > right:  # compare and assign bigger one
+        payload += left
     else:
-        payload += right  # assing
-    return payload  # return
+        payload += right  
+    return payload  # return final payload
 
 
 def findGreedy(tree):
@@ -35,21 +36,13 @@ def findGreedy(tree):
         tree = tree.root # tree를 tree의 root node로 assign.
         # from:  type(tree) == BinarySearchTree.BinarySearchTree
         # to:  type(tree) == BinarySerachTree.TreeNode
-
-    '''
-    # seems never touch basecase
-    # because check child nodes if null
-    if tree == None: # Base case) null node
-        print('touch')
-        return 0
-    '''
     
     payload = tree.payload # payload -> TreeNode.payload
-    if tree.left_child == None and tree.right_child == None: # Both childs are null
+    if not tree.has_any_children(): # Both childs are null
         return payload # return payload itself
-    elif tree.left_child == None: # left is null
+    elif not tree.has_left_child(): # left is null
         payload += findGreedy(tree.right_child) # goto right
-    elif tree.right_child == None: # right is null
+    elif not tree.has_right_child(): # right is null
         payload += findGreedy(tree.left_child) # goto left
     else:
         if tree.left_child.payload > tree.right_child.payload: # compare and decide where to go find
