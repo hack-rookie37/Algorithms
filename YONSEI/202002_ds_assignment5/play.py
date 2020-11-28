@@ -1,5 +1,6 @@
 from BinarySearchTree import *
 from problem1 import findTraversal, findGreedy
+from problem2 import TwoThreeTree
 
 my_tree = BinarySearchTree()
 
@@ -14,7 +15,8 @@ my_tree[16] = 1
 my_tree[7] = 2
 my_tree[8] = 1
 
-#print_tree(my_tree)
+# problem 1
+# print_tree(my_tree)
 '''
 Total Nodes :  10
 (Root) [17]:5
@@ -31,3 +33,21 @@ Total Nodes :  10
 
 print('Traversal Serach: %d' % (findTraversal(my_tree)))
 print('Greedy Serach: %d' % (findGreedy(my_tree)))
+
+
+# probem 2
+'''
+tree = TwoThreeTree()
+
+lst = [13, 7, 24, 15, 4, 29, 20, 16]
+for item in lst:
+     tree.insert(item)
+print()
+
+for item in [16, 9, 20]:
+     print("Find %d: %s" % (item, tree.find(item)))
+     
+print("\nThe Number of TreeNodes: ", len(tree))
+
+tree.printTree()
+'''
