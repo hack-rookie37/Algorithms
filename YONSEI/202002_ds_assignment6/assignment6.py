@@ -177,7 +177,7 @@ class Graph:
 ######## Problem 1 #########
 def kruskal(graph):
     
-    
+    pass
     
     
     
@@ -196,7 +196,7 @@ def kruskal(graph):
 
 def prim(graph, start_vertex):
     
-    
+    pass
     
     
     
@@ -216,7 +216,7 @@ def prim(graph, start_vertex):
 class PointVertex:
     
     
-    
+    pass
     
     
     
@@ -239,7 +239,7 @@ class PointVertex:
 class PointGraph:
     
     
-    
+    pass
     
     
     
@@ -262,7 +262,7 @@ def bellman_ford(graph, start_vertex):
     
     
     
-    
+    pass
     
     
     
