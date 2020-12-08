@@ -51,21 +51,8 @@ class TwoThreeTree:
             
             while True:
                 if cur_node._isLeaf():
-                    if len(cur_node) == 1:
-                        self.add(cur_node, new_node)
-                        break
-                    else:
-                        if cur_node.parent == None:
-                            self.add(cur_node, new_node)
-                            self.root = cur_node.parent
-                            self.size = self.size + 1
-                            break
-                        elif len(cur_node.parent.data) == 1:
-                            self.add(cur_node, new_node)
-                            self.size = self.size + 1
-                            break
-                        else: # len(cur_node.parent.data) == 2
-                            pass
+                    self.add(cur_node, new_node)
+                    break
                 else:
                     if new_node < cur_node:
                         cur_node = cur_node.child[0]
@@ -81,28 +68,27 @@ class TwoThreeTree:
     def add(self, current_node, new_node):
         current_node.data.append(new_node.data[0])
         current_node.data.sort()
-        
         self.check(current_node)
 
     def split(self, current_node):
-        print("Split: " + str(current_node.data))
+        print("Split: " + str(current_node.data))        
         
-        
-        split_node = TreeNode(current_node.data.pop(1), current_node.parent)
+        split_node = TreeNode(current_node.data[1], current_node.parent)
         left_node = TreeNode(current_node.data[0], split_node)
-        right_node = TreeNode(current_node.data[1], split_node)
+        right_node = TreeNode(current_node.data[2], split_node)
         split_node.child.append(left_node)
         split_node.child.append(right_node)        
         if current_node.parent == None:
             current_node.parent = split_node
+            self.root = current_node.parent
         else:
             current_node.parent.data.append(split_node.data[0])
+            current_node.parent.data.sort()
+            current_node.parent.child.remove(current_node)
             current_node.parent.child.append(left_node)
             current_node.parent.child.append(right_node)
         
-        if current_node.parent != None:
-            self.check(current_node.parent)
-        
+        self.size = self.size + 1
 
     def check(self, current_node):
         if len(current_node) > 2:

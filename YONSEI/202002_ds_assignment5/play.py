@@ -38,19 +38,17 @@ print('Greedy Serach: %d' % (findGreedy(my_tree)))
 
 # probem 2
 
+
 tree = TwoThreeTree()
-
-
-'''
 lst = [13, 7, 24, 15, 4, 29, 20, 16]
 for item in lst:
      tree.insert(item)
-print()
 
+'''
 for item in [16, 9, 20]:
      print("Find %d: %s" % (item, tree.find(item)))
-     
+'''
+
 print("\nThe Number of TreeNodes: ", len(tree))
 
 tree.printTree()
-'''
