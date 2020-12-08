@@ -176,7 +176,7 @@ class Graph:
 
 ######## Problem 1 #########
 def kruskal(graph):
-    
+    return graph
     pass
     
     
@@ -195,7 +195,7 @@ def kruskal(graph):
     
 
 def prim(graph, start_vertex):
-    
+    return graph, start_vertex
     pass
     
     
