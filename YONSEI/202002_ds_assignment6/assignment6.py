@@ -176,8 +176,9 @@ class Graph:
 
 ######## Problem 1 #########
 def kruskal(graph):
-    return graph
-    pass
+    pq = PriorityQueue()
+    kruskal_graph = Graph()
+    return kruskal_graph
     
     
     
@@ -195,8 +196,25 @@ def kruskal(graph):
     
 
 def prim(graph, start_vertex):
-    return graph, start_vertex
-    pass
+    pq = PriorityQueue()
+    prim_graph = Graph()
+    for v in graph:
+        v.setDistance(sys.maxsize)
+        v.setPred(None)
+    graph.vertList[start_vertex].setDistance(0)
+    pq.buildHeap([(v.getDistance(),v) for v in graph])
+    while not pq.isEmpty():
+        currentVert = pq.delMin()
+        for nextVert in currentVert.getConnections():
+          newCost = currentVert.getWeight(nextVert)
+          if nextVert in pq and newCost < nextVert.getDistance():
+              prim_graph.addEdge(currentVert.getId(), nextVert.getId(), newCost)
+              prim_graph.addEdge(nextVert.getId(), currentVert.getId(), newCost)
+              nextVert.setPred(currentVert)
+              nextVert.setDistance(newCost)
+              pq.decreaseKey(nextVert,newCost)
+    
+    return prim_graph
     
     
     
