@@ -53,14 +53,14 @@ F is connected to
 C : 6
 --------------------
 '''
-'''
+
 remain_alphabets = ['B', 'D', 'E']
 for alpha in remain_alphabets:
     print(alpha, 'is connected to')
     for k, v in g_mst2.vertList[alpha].connectedTo.items():
         print(k.getId(), ':', v)
     print('-' * 20)
-'''
+
 '''
 B is connected to
 A : 1
