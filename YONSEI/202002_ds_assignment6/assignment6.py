@@ -197,7 +197,6 @@ def kruskal(graph):
 
 def prim(graph, start_vertex):
     pq = PriorityQueue()
-    prim_graph = Graph()
     for v in graph:
         v.setDistance(sys.maxsize)
         v.setPred(None)
@@ -208,11 +207,20 @@ def prim(graph, start_vertex):
         for nextVert in currentVert.getConnections():
             newCost = currentVert.getWeight(nextVert)
             if nextVert in pq and newCost < nextVert.getDistance():
-
                 nextVert.setPred(currentVert)
                 nextVert.setDistance(newCost)
                 pq.decreaseKey(nextVert, newCost)
-
+    pq.buildHeap([(v.getDistance(), v) for v in graph])
+    prim_graph = Graph()
+    while not pq.isEmpty():
+        currentVert = pq.delMin()
+        for nextVert in currentVert.getConnections():
+            newCost = currentVert.getWeight(nextVert)
+            if newCost == nextVert.getDistance():
+                prim_graph.addEdge(currentVert.getId(),
+                                   nextVert.getId(), newCost)
+                prim_graph.addEdge(
+                    nextVert.getId(), currentVert.getId(), newCost)
     return prim_graph
 
 
