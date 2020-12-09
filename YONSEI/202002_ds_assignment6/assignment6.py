@@ -192,6 +192,8 @@ def kruskal(graph):
         for k, v in graph.vertList[key].connectedTo.items()
         if key < k.getId()
     ])
+    pq.heapArray.sort()
+    print(pq.heapArray)
     kruskal_grpah = Graph()
     while not pq.isEmpty():
         dist = pq.heapArray[1][0]
@@ -201,7 +203,10 @@ def kruskal(graph):
         else:
             kruskal_grpah.addEdge(newEdge[0], newEdge[1], dist)
             kruskal_grpah.addEdge(newEdge[1], newEdge[0], dist)
-            parent[newEdge[1]] = parent[newEdge[0]]
+            if parent[newEdge[0]] != newEdge[0]: # follow more great parent
+                parent[newEdge[1]] = parent[newEdge[0]]
+            else:
+                parent[newEdge[0]] = parent[newEdge[1]]
     return kruskal_grpah
 
 
