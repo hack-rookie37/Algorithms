@@ -184,15 +184,25 @@ class Graph:
 
 def kruskal(graph):
     pq = PriorityQueue()
-    kruskal_graph = Graph()
-    parent = {(k, k) for k in graph}
-
-    pq.buildHeap(
-        []
-    )
-
-    # print(pq.heapArray)
-    return graph
+    parent = {key:key for key in graph.vertList}  # e.g. ['A':'A', 'B':'B', ... 'F':'F']
+    pq.buildHeap([
+        # (edgeValue, (key=start, k=end))
+        (v, (key, k.getId()))
+        for key in graph.vertList
+        for k, v in graph.vertList[key].connectedTo.items()
+        if key < k.getId()
+    ])
+    kruskal_grpah = Graph()
+    while not pq.isEmpty():
+        dist = pq.heapArray[1][0]
+        newEdge = pq.delMin()
+        if parent[newEdge[0]] == parent[newEdge[1]]: # union-find
+            continue
+        else:
+            kruskal_grpah.addEdge(newEdge[0], newEdge[1], dist)
+            kruskal_grpah.addEdge(newEdge[1], newEdge[0], dist)
+            parent[newEdge[1]] = parent[newEdge[0]]
+    return kruskal_grpah
 
 
 def prim(graph, start_vertex):
