@@ -193,17 +193,17 @@ def kruskal(graph):
         if key < k.getId()
     ])
     pq.heapArray.sort()
-    print(pq.heapArray)
+    # print(pq.heapArray)
     kruskal_grpah = Graph()
     while not pq.isEmpty():
         dist = pq.heapArray[1][0]
         newEdge = pq.delMin()
-        if parent[newEdge[0]] == parent[newEdge[1]]: # union-find
+        if parent[newEdge[0]] == parent[newEdge[1]]:  # union-find
             continue
         else:
             kruskal_grpah.addEdge(newEdge[0], newEdge[1], dist)
             kruskal_grpah.addEdge(newEdge[1], newEdge[0], dist)
-            if parent[newEdge[0]] != newEdge[0]: # follow more great parent
+            if parent[newEdge[0]] != newEdge[0]:  # follow more great parent
                 parent[newEdge[1]] = parent[newEdge[0]]
             else:
                 parent[newEdge[0]] = parent[newEdge[1]]
