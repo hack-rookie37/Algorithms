@@ -178,7 +178,14 @@ class Graph:
 def kruskal(graph):
     pq = PriorityQueue()
     kruskal_graph = Graph()
-    return kruskal_graph
+    parent = {(k,k) for k in graph}
+    
+    pq.buildHeap(
+        []
+    )
+        
+    #print(pq.heapArray)
+    return graph
     
     
     
@@ -198,9 +205,6 @@ def kruskal(graph):
 def prim(graph, start_vertex):
     pq = PriorityQueue()
     prim_graph = Graph()
-    for v in graph:
-        v.setDistance(sys.maxsize)
-        v.setPred(None)
     graph.vertList[start_vertex].setDistance(0)
     pq.buildHeap([(v.getDistance(),v) for v in graph])
     while not pq.isEmpty():
@@ -213,7 +217,6 @@ def prim(graph, start_vertex):
               nextVert.setPred(currentVert)
               nextVert.setDistance(newCost)
               pq.decreaseKey(nextVert,newCost)
-    
     return prim_graph
     
     
