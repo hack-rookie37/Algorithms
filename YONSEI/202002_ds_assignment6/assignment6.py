@@ -195,7 +195,6 @@ def kruskal(graph):
     kruskal_grpah = Graph()
     while not pq.isEmpty():
         dist = pq.heapArray[1][0]
-        print(pq.heapArray)
         newEdge = pq.delMin()
         def findParent(v):
             if parent[v] == v:
