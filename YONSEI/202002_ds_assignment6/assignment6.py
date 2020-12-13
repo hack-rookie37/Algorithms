@@ -186,27 +186,29 @@ def kruskal(graph):
     pq = PriorityQueue()
     parent = {key:key for key in graph.vertList}  # e.g. ['A':'A', 'B':'B', ... 'F':'F']
     pq.buildHeap([
-        # (edgeValue, (key=start, k=end))
+        # (edgeValue, (key=start, k=end)) e.g. [(0,0), (1,('A', 'B'), (2, 'A', 'C'), ...)]
         (v, (key, k.getId()))
         for key in graph.vertList
         for k, v in graph.vertList[key].connectedTo.items()
         if key < k.getId()
     ])
-    pq.heapArray.sort()
-    # print(pq.heapArray)
     kruskal_grpah = Graph()
     while not pq.isEmpty():
         dist = pq.heapArray[1][0]
+        print(pq.heapArray)
         newEdge = pq.delMin()
-        if parent[newEdge[0]] == parent[newEdge[1]]:  # union-find
+        def findParent(v):
+            if parent[v] == v:
+                return v
+            return findParent(parent[v])
+        p0 = findParent(newEdge[0])
+        p1 = findParent(newEdge[1])
+        if p0 == p1:
             continue
         else:
+            parent[p1] = parent[p0]
             kruskal_grpah.addEdge(newEdge[0], newEdge[1], dist)
             kruskal_grpah.addEdge(newEdge[1], newEdge[0], dist)
-            if parent[newEdge[0]] != newEdge[0]:  # follow more great parent
-                parent[newEdge[1]] = parent[newEdge[0]]
-            else:
-                parent[newEdge[0]] = parent[newEdge[1]]
     return kruskal_grpah
 
 
@@ -224,7 +226,7 @@ def prim(graph, start_vertex):
             if nextVert in pq and newCost < nextVert.getDistance():
                 nextVert.setPred(currentVert)
                 nextVert.setDistance(newCost)
-                pq.decreaseKey(nextVert, newCost)
+                pq.decreaseKey(nextVert, newCost) # locates adjcent vertices(nextVert) by pq based on the currently selected vertex
     pq.buildHeap([(v.getDistance(), v) for v in graph])
     prim_graph = Graph()
     while not pq.isEmpty():
