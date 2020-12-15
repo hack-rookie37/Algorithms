@@ -242,13 +242,57 @@ def prim(graph, start_vertex):
 
 ######## Problem 2 #########
 class PointVertex:
-
-    pass
-
-
+    def __init__(self, key, x, y, reward):
+        self.key = key
+        self.x = x
+        self.y = y
+        self.reward = reward
+        
 class PointGraph:
-
-    pass
+    def __init__(self, thres):
+        self.thres = float(thres)
+        self.vertList = []
+        self.numVertices = 0
+        
+    def add_vertex(self, vertex):
+        self.numVertices = self.numVertices + 1
+        self.vertList.append(vertex)
+        if self.numVertices >= 2:
+            # nested loop e.g. A B, A C, A D, B C, B D, C D (PointVertex Object)
+            # operation: n combination 2
+            for i in range(len(self.vertList)):
+                for j in range(i+1, len(self.vertList), 1):
+                    src = self.vertList[i] 
+                    dst = self.vertList[j] 
+                    dist = self.get_distance(src, dst)
+                    reward = self.get_reward(src, dst)
+                    if dist >= self.thres: # add_edge if dist < thres
+                        continue
+                    else:
+                        if reward >= 0:
+                            val = dist + reward
+                            self.add_edge(dst, src, val)
+                        else:
+                            val = dist + (reward * -1)
+                            self.add_edge(src, dst, val)
+    
+    def add_edge(self, src, dst, val=0):
+        if src not in self.vertList:
+            self.add_vertex(src)
+        if dst not in self.vertList:
+            self.add_vertex(dst)
+    
+    def get_distance(self, src, dst):
+        return math.sqrt((src.x - dst.x)**2 + (src.y - dst.y)**2) # Pythagoras
+    
+    def get_reward(self, src, dst):
+        return src.reward - dst.reward
+    
+    def __str__(self):
+        str = ''
+        for vert in self.vertList:
+            str = str + 'Node ' + vert.key + '\n'
+        return str
 
 
 def bellman_ford(graph, start_vertex):
