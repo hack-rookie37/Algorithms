@@ -281,7 +281,7 @@ class PointVertex:
 
     def set_distance(self, d):
         self.distance = d
-        
+
     def set_pred(self, p):
         self.pred = p
 
@@ -361,8 +361,9 @@ def bellman_ford(graph, start_vertex):
     for u in graph:
         for v in u.get_connections().keys():
             if graph.vertList[v].get_distance() > u.get_distance() + u.get_connections()[v]:
-                graph.vertList[v].set_distance(u.get_distance() + u.get_connections()[v])
-                graph.vertList[v].set_pred(u) 
+                graph.vertList[v].set_distance(
+                    u.get_distance() + u.get_connections()[v])
+                graph.vertList[v].set_pred(u)
     # detect nagative cycle(s)
     for u in graph:
         for v in u.get_connections().keys():
