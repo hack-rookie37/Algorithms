@@ -297,13 +297,13 @@ class PointGraph:
         return src.reward - dst.reward
 
     def __str__(self):
-        str = ''
+        string = ''
         for vert in self.vertList:
-            str = str + 'Node ' + vert.key + '\n'
+            string = string + 'Node ' + vert.key + '\n'
             if len(vert.connectedTo) != 0:
                 for k, v in vert.connectedTo.items():
-                    str = str + k + ' : ' + repr(v) + '\n'
-        return str
+                    string = string + k + ' : ' + str(v) + '\n'
+        return string
 
 
 def bellman_ford(graph, start_vertex):
