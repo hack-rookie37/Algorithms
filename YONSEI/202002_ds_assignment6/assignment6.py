@@ -253,6 +253,7 @@ class PointVertex:
         self.connectedTo = {}
 
     def add_neighbor(self, nbr, weight=0):
+        # add if empty, or update weight
         self.connectedTo[nbr] = weight
 
 
@@ -267,7 +268,7 @@ class PointGraph:
         self.vertList.append(vertex)
         if self.numVertices >= 2:
             # nested loop e.g. A B, A C, A D, B C, B D, C D (PointVertex Object)
-            # operation: n combination 2
+            # operation complexity: n combination 2
             for i in range(len(self.vertList)):
                 for j in range(i+1, len(self.vertList), 1):
                     src = self.vertList[i]
@@ -288,7 +289,7 @@ class PointGraph:
             self.add_vertex(src)
         if dst not in self.vertList:
             self.add_vertex(dst)
-        self.vertList[self.vertList.index(src)].add_neighbor(dst.key, val)
+        src.add_neighbor(dst.key, val)
 
     def get_distance(self, src, dst):
         return math.sqrt((src.x - dst.x)**2 + (src.y - dst.y)**2)  # Pythagoras
