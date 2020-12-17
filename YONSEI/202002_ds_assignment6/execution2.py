@@ -1,4 +1,4 @@
-#execution code
+# execution code
 
 from assignment6 import PointVertex, PointGraph, bellman_ford
 

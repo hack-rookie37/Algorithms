@@ -184,7 +184,8 @@ class Graph:
 
 def kruskal(graph):
     pq = PriorityQueue()
-    parent = {key:key for key in graph.vertList}  # e.g. ['A':'A', 'B':'B', ... 'F':'F']
+    # e.g. ['A':'A', 'B':'B', ... 'F':'F']
+    parent = {key: key for key in graph.vertList}
     pq.buildHeap([
         # (edgeValue, (key=start, k=end)) e.g. [(0,0), (1,('A', 'B'), (2, 'A', 'C'), ...)]
         (v, (key, k.getId()))
@@ -196,6 +197,7 @@ def kruskal(graph):
     while not pq.isEmpty():
         dist = pq.heapArray[1][0]
         newEdge = pq.delMin()
+
         def findParent(v):
             if parent[v] == v:
                 return v
@@ -225,7 +227,8 @@ def prim(graph, start_vertex):
             if nextVert in pq and newCost < nextVert.getDistance():
                 nextVert.setPred(currentVert)
                 nextVert.setDistance(newCost)
-                pq.decreaseKey(nextVert, newCost) # locates adjcent vertices(nextVert) by pq based on the currently selected vertex
+                # locates adjcent vertices(nextVert) by pq based on the currently selected vertex
+                pq.decreaseKey(nextVert, newCost)
     pq.buildHeap([(v.getDistance(), v) for v in graph])
     prim_graph = Graph()
     while not pq.isEmpty():
@@ -247,13 +250,14 @@ class PointVertex:
         self.x = x
         self.y = y
         self.reward = reward
-        
+
+
 class PointGraph:
     def __init__(self, thres):
         self.thres = float(thres)
         self.vertList = []
         self.numVertices = 0
-        
+
     def add_vertex(self, vertex):
         self.numVertices = self.numVertices + 1
         self.vertList.append(vertex)
@@ -262,32 +266,32 @@ class PointGraph:
             # operation: n combination 2
             for i in range(len(self.vertList)):
                 for j in range(i+1, len(self.vertList), 1):
-                    src = self.vertList[i] 
-                    dst = self.vertList[j] 
+                    src = self.vertList[i]
+                    dst = self.vertList[j]
                     dist = self.get_distance(src, dst)
                     reward = self.get_reward(src, dst)
-                    if dist >= self.thres: # add_edge if dist < thres
+                    if dist >= self.thres:  # add_edge if dist < thres
                         continue
                     else:
                         if reward >= 0:
                             val = dist + reward
                             self.add_edge(dst, src, val)
-                        else:
+                        if reward <= 0:
                             val = dist + (reward * -1)
                             self.add_edge(src, dst, val)
-    
+
     def add_edge(self, src, dst, val=0):
         if src not in self.vertList:
             self.add_vertex(src)
         if dst not in self.vertList:
             self.add_vertex(dst)
-    
+
     def get_distance(self, src, dst):
-        return math.sqrt((src.x - dst.x)**2 + (src.y - dst.y)**2) # Pythagoras
-    
+        return math.sqrt((src.x - dst.x)**2 + (src.y - dst.y)**2)  # Pythagoras
+
     def get_reward(self, src, dst):
         return src.reward - dst.reward
-    
+
     def __str__(self):
         str = ''
         for vert in self.vertList:
