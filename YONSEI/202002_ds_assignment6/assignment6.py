@@ -194,18 +194,23 @@ def kruskal(graph):
         if key < k.getId()
     ])
     kruskal_grpah = Graph()
+    # select and add edge(s)
     while not pq.isEmpty():
         dist = pq.heapArray[1][0]
         newEdge = pq.delMin()
 
+        # union-find function
         def findParent(v):
             if parent[v] == v:
                 return v
             return findParent(parent[v])
+
         p0 = findParent(newEdge[0])
         p1 = findParent(newEdge[1])
+        # skip adding
         if p0 == p1:
             continue
+        # add the edge
         else:
             parent[p1] = parent[p0]
             kruskal_grpah.addEdge(newEdge[0], newEdge[1], dist)
@@ -220,6 +225,7 @@ def prim(graph, start_vertex):
         v.setPred(None)
     graph.vertList[start_vertex].setDistance(0)
     pq.buildHeap([(v.getDistance(), v) for v in graph])
+    # update costs
     while not pq.isEmpty():
         currentVert = pq.delMin()
         for nextVert in currentVert.getConnections():
@@ -231,6 +237,7 @@ def prim(graph, start_vertex):
                 pq.decreaseKey(nextVert, newCost)
     pq.buildHeap([(v.getDistance(), v) for v in graph])
     prim_graph = Graph()
+    # create tree from cost-updated graph
     while not pq.isEmpty():
         currentVert = pq.delMin()
         for nextVert in currentVert.getConnections():
