@@ -250,6 +250,10 @@ class PointVertex:
         self.x = x
         self.y = y
         self.reward = reward
+        self.connectedTo = {}
+
+    def add_neighbor(self, nbr, weight=0):
+        self.connectedTo[nbr] = weight
 
 
 class PointGraph:
@@ -273,18 +277,18 @@ class PointGraph:
                     if dist >= self.thres:  # add_edge if dist < thres
                         continue
                     else:
+                        val = dist + reward
                         if reward >= 0:
-                            val = dist + reward
                             self.add_edge(dst, src, val)
                         if reward <= 0:
-                            val = dist + (reward * -1)
                             self.add_edge(src, dst, val)
 
-    def add_edge(self, src, dst, val=0):
+    def add_edge(self, src, dst, val):
         if src not in self.vertList:
             self.add_vertex(src)
         if dst not in self.vertList:
             self.add_vertex(dst)
+        self.vertList[self.vertList.index(src)].add_neighbor(dst.key, val)
 
     def get_distance(self, src, dst):
         return math.sqrt((src.x - dst.x)**2 + (src.y - dst.y)**2)  # Pythagoras
@@ -296,6 +300,9 @@ class PointGraph:
         str = ''
         for vert in self.vertList:
             str = str + 'Node ' + vert.key + '\n'
+            if len(vert.connectedTo) != 0:
+                for k, v in vert.connectedTo.items():
+                    str = str + k + ' : ' + repr(v) + '\n'
         return str
 
 
