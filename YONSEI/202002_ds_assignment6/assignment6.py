@@ -251,30 +251,60 @@ class PointVertex:
         self.y = y
         self.reward = reward
         self.connectedTo = {}
+        self.distance = sys.maxsize
+        self.pred = None
+
+    def get_key(self):
+        return self.key
+
+    def get_x(self):
+        return self.x
+
+    def get_y(self):
+        return self.y
+    
+    def get_reward(self):
+        return self.reward
+    
+    def get_connections(self):
+        return self.connectedTo
+    
+    def get_pred(self):
+        return self.pred
 
     def add_neighbor(self, nbr, weight=0):
         # add if empty, or update weight
         self.connectedTo[nbr] = weight
 
+    def set_distance(self, d):
+        self.distance = d
+        
+    def set_pred(self, p):
+        self.pred = p
+
 
 class PointGraph:
     def __init__(self, thres):
         self.thres = float(thres)
-        self.vertList = []
+        self.vertList = {}
         self.numVertices = 0
+        
+    def get_vertices(self):
+        return self.vertList
 
     def add_vertex(self, vertex):
         self.numVertices = self.numVertices + 1
-        self.vertList.append(vertex)
+        self.vertList[vertex.get_key()] = vertex
         if self.numVertices >= 2:
+            vlist = list(self.vertList)
             # nested loop e.g. A B, A C, A D, B C, B D, C D (PointVertex Object)
             # operation complexity: n combination 2
-            for i in range(len(self.vertList)):
-                for j in range(i+1, len(self.vertList), 1):
-                    src = self.vertList[i]
-                    dst = self.vertList[j]
+            for i in range(len(vlist)):
+                for j in range(i+1, len(vlist), 1):
+                    src = self.vertList[vlist[i]]
+                    dst = self.vertList[vlist[j]]
                     dist = self.get_distance(src, dst)
-                    reward = self.get_reward(src, dst)
+                    reward = self.cal_reward(src, dst)
                     if dist >= self.thres:  # add_edge if dist < thres
                         continue
                     else:
@@ -286,27 +316,50 @@ class PointGraph:
 
     def add_edge(self, src, dst, val):
         if src not in self.vertList:
-            self.add_vertex(src)
+            self.numVertices = self.numVertices + 1
+            self.vertList[src.get_key()] = src
         if dst not in self.vertList:
-            self.add_vertex(dst)
-        src.add_neighbor(dst.key, val)
+            self.numVertices = self.numVertices + 1
+            self.vertList[dst.get_key()] = dst
+        src.add_neighbor(dst.get_key(), val)
 
     def get_distance(self, src, dst):
-        return math.sqrt((src.x - dst.x)**2 + (src.y - dst.y)**2)  # Pythagoras
+        # Pythagoras
+        return math.sqrt((src.get_x() - dst.get_x())**2 + (src.get_y() - dst.get_y())**2)
 
-    def get_reward(self, src, dst):
-        return src.reward - dst.reward
+    def cal_reward(self, src, dst):
+        return src.get_reward() - dst.get_reward()
 
     def __str__(self):
-        string = ''
-        for vert in self.vertList:
-            string = string + 'Node ' + vert.key + '\n'
-            if len(vert.connectedTo) != 0:
-                for k, v in vert.connectedTo.items():
-                    string = string + k + ' : ' + str(v) + '\n'
+        string = ''    
+        for k, v in self.vertList.items():
+            string = string + 'Node ' + k + '\n'            
+            if v.get_connections() != None:
+                for ck, cv in v.get_connections().items():
+                    string = string + ck + ' : ' + str(cv) + '\n'
         return string
+
+    def __iter__(self):
+        return iter(self.vertList)
 
 
 def bellman_ford(graph, start_vertex):
-
+    # Dist(s,v) = Dist(s,u) + weight(u,v)
+    # negative cycle return None
+    
+    # start = 0, the rests set to infinite
+    for v in graph:
+        if v.get_key().lower() == start_vertex.get_key().lower():
+            v.set_distance(0)
+            continue
+        v.set_distance(sys.maxsize)
+        # v.setPred(None)
+        
+    # relax
+    for u in graph:
+        for v in u.get_connections().keys():
+            if v.get_distance() > u.get_distance() + u.connectedTo[v]:
+                v.set_distance(u.get_distance() + u.connectedTo[v])
+                v.set_pred(u)
+        pass
     pass
