@@ -262,13 +262,16 @@ class PointVertex:
 
     def get_y(self):
         return self.y
-    
+
     def get_reward(self):
         return self.reward
-    
+
     def get_connections(self):
         return self.connectedTo
-    
+
+    def get_distance(self):
+        return self.distance
+
     def get_pred(self):
         return self.pred
 
@@ -288,7 +291,7 @@ class PointGraph:
         self.thres = float(thres)
         self.vertList = {}
         self.numVertices = 0
-        
+
     def get_vertices(self):
         return self.vertList
 
@@ -331,35 +334,41 @@ class PointGraph:
         return src.get_reward() - dst.get_reward()
 
     def __str__(self):
-        string = ''    
+        string = ''
         for k, v in self.vertList.items():
-            string = string + 'Node ' + k + '\n'            
+            string = string + 'Node ' + k + '\n'
             if v.get_connections() != None:
                 for ck, cv in v.get_connections().items():
                     string = string + ck + ' : ' + str(cv) + '\n'
         return string
 
     def __iter__(self):
-        return iter(self.vertList)
+        return iter(self.vertList.values())
 
 
 def bellman_ford(graph, start_vertex):
     # Dist(s,v) = Dist(s,u) + weight(u,v)
     # negative cycle return None
-    
+    bf = {}
     # start = 0, the rests set to infinite
     for v in graph:
-        if v.get_key().lower() == start_vertex.get_key().lower():
-            v.set_distance(0)
-            continue
         v.set_distance(sys.maxsize)
-        # v.setPred(None)
-        
+        v.set_pred(None)
+    graph.vertList[start_vertex.get_key()].set_distance(0)
+
     # relax
+    # u is start, v is destination, w is weight from u to v
     for u in graph:
         for v in u.get_connections().keys():
-            if v.get_distance() > u.get_distance() + u.connectedTo[v]:
-                v.set_distance(u.get_distance() + u.connectedTo[v])
-                v.set_pred(u)
-        pass
-    pass
+            if graph.vertList[v].get_distance() > u.get_distance() + u.get_connections()[v]:
+                graph.vertList[v].set_distance(u.get_distance() + u.get_connections()[v])
+                graph.vertList[v].set_pred(u) 
+    # detect nagative cycle(s)
+    for u in graph:
+        for v in u.get_connections().keys():
+            if graph.vertList[v].get_distance() > u.get_distance() + u.get_connections()[v]:
+                return None
+        # bf to dictionary
+        bf[u.get_key()] = graph.vertList[u.get_key()].get_distance()
+    print(bf)
+    return bf
